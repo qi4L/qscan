@@ -12,7 +12,7 @@
 
 作者很久没更新了，就自己改了下，加入漏洞检测，效果如下：
 
-![img效果图.png](assets/img效果图.png)
+![img效果图.png](assets/img.png)
 
 ## 1 简介
 
