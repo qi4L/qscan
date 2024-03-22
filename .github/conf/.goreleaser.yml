@@ -1,0 +1,64 @@
+before:
+  hooks:
+    - go mod tidy
+builds:
+  -
+    id: default
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - windows
+      - linux
+      - darwin
+      - freebsd
+      - solaris
+    goarch:
+      - amd64
+      - "386"
+      - arm
+      - arm64
+      - mips
+      - mipsle
+      - mips64
+    goarm:
+      - "6"
+      - "7"
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+upx:
+  -
+    ids: [ default ]
+    enabled: true
+    goos: ["windows", "linux"]
+    goarch: ["amd64", "386"]
+    compress: best
+#    lzma: true
+#    brute: true
+archives:
+  -
+    format: binary
+    allow_different_binary_count: true
+    name_template: >-
+      {{- .ProjectName }}
+      {{- if eq .Os "darwin"}}_mac
+      {{- else if eq .Os "linux"}}
+      {{- else if eq .Os "windows"}}
+      {{- else }}_{{ .Os }}{{ end }}
+      {{- if eq .Arch "amd64" }}
+      {{- else if eq .Arch "386" }}32
+      {{- else }}_{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end -}}
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - "^*.md"
+      - "^*.ya?ml"
