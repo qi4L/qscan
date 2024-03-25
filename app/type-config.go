@@ -28,7 +28,9 @@ type Config struct {
 	Hydra, HydraUpdate             bool
 	HydraPass, HydraUser, HydraMod []string
 	//exploit
-	Exploit bool
+	Exploit, DnsLog, PocFull bool
+	Cookie                   string
+	PocNum, WebTimeout       int
 	//fofa
 	Fofa           []string
 	FofaFixKeyword string
@@ -74,6 +76,13 @@ func ConfigInit() {
 	Setting.HydraUser = args.HydraUser
 	Setting.HydraPass = args.HydraPass
 	Setting.loadHydraMod(args.HydraMod)
+	//exploit
+	Setting.Exploit = args.Exploit
+	Setting.Cookie = args.Cookie
+	Setting.PocNum = args.PocNum
+	Setting.DnsLog = args.DnsLog
+	Setting.PocFull = args.PocFull
+	Setting.WebTimeout = args.WebTimeout
 	//fofa模块
 	Setting.Fofa = args.Fofa
 	Setting.FofaSize = args.FofaSize

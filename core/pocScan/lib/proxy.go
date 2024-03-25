@@ -18,7 +18,7 @@ func WrapperTcpWithTimeout(network, address string, timeout time.Duration) (net.
 func WrapperTCP(network, address string, forward *net.Dialer) (net.Conn, error) {
 	//get conn
 	var conn net.Conn
-	if app.Socks5Proxy == "" {
+	if app.Setting.Proxy == "" {
 		var err error
 		conn, err = forward.Dial(network, address)
 		if err != nil {
@@ -39,7 +39,7 @@ func WrapperTCP(network, address string, forward *net.Dialer) (net.Conn, error) 
 }
 
 func Socks5Dailer(forward *net.Dialer) (proxy.Dialer, error) {
-	u, err := url.Parse(app.Socks5Proxy)
+	u, err := url.Parse(app.Setting.Proxy)
 	if err != nil {
 		return nil, err
 	}

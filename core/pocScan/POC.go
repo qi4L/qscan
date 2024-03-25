@@ -36,11 +36,11 @@ func Execute(PocInfo app.PocInfo) {
 	req.Header.Set("User-agent", app.UserAgent)
 	req.Header.Set("Accept", app.Accept)
 	req.Header.Set("Accept-Language", "zh-CN,zh;q=0.9")
-	if app.Cookie != "" {
-		req.Header.Set("Cookie", app.Cookie)
+	if app.Setting.Cookie != "" {
+		req.Header.Set("Cookie", app.Setting.Cookie)
 	}
 	pocs := filterPoc(PocInfo.PocName)
-	lib.CheckMultiPoc(req, pocs, app.PocNum)
+	lib.CheckMultiPoc(req, pocs, app.Setting.PocNum)
 }
 
 func initpoc() {

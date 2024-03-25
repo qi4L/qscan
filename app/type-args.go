@@ -22,6 +22,10 @@ type args struct {
 	//hydra模块
 	Hydra, HydraUpdate             bool
 	HydraUser, HydraPass, HydraMod []string
+	//exploit模块
+	Exploit, DnsLog, PocFull bool
+	Cookie                   string
+	PocNum, WebTimeout       int
 	//fofa模块
 	Fofa                      []string
 	FofaField, FofaFixKeyword string
@@ -38,15 +42,8 @@ var (
 )
 
 var (
-	UserAgent   = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"
-	Accept      = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"
-	Cookie      = ""
-	PocNum      = 20
-	DnsLog      = false
-	PocFull     = false
-	Proxy       = ""
-	WebTimeout  = 5
-	Socks5Proxy = ""
+	UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"
+	Accept    = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"
 )
 
 type PocInfo struct {
@@ -82,6 +79,13 @@ func (o *args) define() {
 	sflag.StringSpliceVar(&o.HydraUser, "hydra-user")
 	sflag.StringSpliceVar(&o.HydraPass, "hydra-pass")
 	sflag.StringSpliceVar(&o.HydraMod, "hydra-mod")
+	//exploit
+	sflag.BoolVar(&o.Exploit, "exploit", false)
+	sflag.StringVar(&o.Cookie, "cookie", "")
+	sflag.IntVar(&o.PocNum, "num", 20)
+	sflag.IntVar(&o.WebTimeout, "wt", 5)
+	sflag.BoolVar(&o.DnsLog, "dns", false)
+	sflag.BoolVar(&o.PocFull, "full", false)
 	//fofa模块
 	sflag.StringSpliceVar(&o.Fofa, "fofa")
 	sflag.StringSpliceVar(&o.Fofa, "f")

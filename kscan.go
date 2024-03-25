@@ -70,12 +70,19 @@ options:
   --match         对资产返回banner进行检索，剔除不存在关键字的结果记录
   --not-match     对资产返回banner进行检索，剔除存在关键字的结果记录
   --hydra         自动化爆破支持协议：ssh,rdp,ftp,smb,mysql,mssql,oracle,postgresql,mongodb,redis,默认会开启全部
+  --exploit       漏洞探测，使用xray poc
 hydra options:
    --hydra-user   自定义hydra爆破用户名:username or user1,user2 or file:username.txt
    --hydra-pass   自定义hydra爆破密码:password or pass1,pass2 or file:password.txt
                   若密码中存在使用逗号的情况，则使用\,进行转义，其他符号无需转义
    --hydra-update 自定义用户名、密码模式，若携带此参数，则为新增模式，会将用户名和密码补充在默认字典后面。否则将替换默认字典。
    --hydra-mod    指定自动化暴力破解模块:rdp or rdp,ssh,smb
+exploit options:
+   --cookie       设置cookie
+   --num          web poc 发包速率  (default 20)
+   --dns          使用DnsLog Poc
+   --full         poc全扫描，如：shiro 100 key
+   --wt           web访问超时时间 (default 5)
 fofa options:
    --fofa-syntax  将获取fofa搜索语法说明
    --fofa-size    将设置fofa返回条目数，默认100条

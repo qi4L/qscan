@@ -317,9 +317,10 @@ func generateURLScanner(wg *sync.WaitGroup) *scanner.URLClient {
 	client := scanner.NewURLScanner(URLConfig)
 	client.HandlerMatched = func(URL *url.URL, banner *appfinger.Banner, finger *appfinger.FingerPrint) {
 		outputAppFinger(URL, banner, finger)
-		// 漏洞探测逻辑入口
-		url := URL.Scheme + "://" + URL.Host
-		pocScan.Run1(url)
+		if app.Setting.Exploit == true {
+			url := URL.Scheme + "://" + URL.Host
+			pocScan.Run1(url)
+		}
 	}
 	client.HandlerError = func(url *url.URL, err error) {
 		slog.Println(slog.DEBUG, "URLScanner Error: ", url.String(), err)

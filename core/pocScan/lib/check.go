@@ -85,7 +85,7 @@ func executePoc(oReq *http.Request, p *Poc) (bool, error, string) {
 	for _, item := range p.Set {
 		k, expression := item.Key, item.Value
 		if expression == "newReverse()" {
-			if !app.DnsLog {
+			if !app.Setting.DnsLog {
 				return false, nil, ""
 			}
 			variableMap[k] = newReverse()
@@ -243,7 +243,7 @@ func optimizeCookies(rawCookie string) (output string) {
 }
 
 func newReverse() *Reverse {
-	if !app.DnsLog {
+	if !app.Setting.DnsLog {
 		return &Reverse{}
 	}
 	letters := "1234567890abcdefghijklmnopqrstuvwxyz"
@@ -283,7 +283,7 @@ func clusterpoc(oReq *http.Request, p *Poc, variableMap map[string]interface{}, 
 	look:
 		for j, item := range setsMap {
 			//shiro默认只跑10key
-			if p.Name == "poc-yaml-shiro-key" && !app.PocFull && j >= 10 {
+			if p.Name == "poc-yaml-shiro-key" && !app.Setting.PocFull && j >= 10 {
 				if item[1] == "cbc" {
 					continue
 				} else {

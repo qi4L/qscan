@@ -27,10 +27,10 @@ var (
 
 func Inithttp() {
 	//common.Proxy = "http://127.0.0.1:8080"
-	if app.PocNum == 0 {
-		app.PocNum = 20
+	if app.Setting.PocNum == 0 {
+		app.Setting.PocNum = 20
 	}
-	err := InitHttpClient(app.PocNum, app.Proxy, time.Duration(app.WebTimeout)*time.Second)
+	err := InitHttpClient(app.Setting.PocNum, app.Setting.Proxy, time.Duration(app.Setting.WebTimeout)*time.Second)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -54,7 +54,7 @@ func InitHttpClient(ThreadsNum int, DownProxy string, Timeout time.Duration) err
 		DisableKeepAlives:   false,
 	}
 
-	if app.Socks5Proxy != "" {
+	if app.Setting.Proxy != "" {
 		dialSocksProxy, err := Socks5Dailer(dialer)
 		if err != nil {
 			return err
