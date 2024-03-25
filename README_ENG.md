@@ -1,14 +1,16 @@
 # Kscan - Simple Asset Mapping Tool
-<a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/golang-1.6+-9cf"></a>
-<a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/kscan-1.76-ff69b4"></a>
-<a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/LICENSE-GPL-important"></a>
-![GitHub Repo stars](https://img.shields.io/github/stars/lcvvvv/kscan?color=success)
-![GitHub forks](https://img.shields.io/github/forks/lcvvvv/kscan)
-![GitHub all release](https://img.shields.io/github/downloads/lcvvvv/kscan/total?color=blueviolet) 
 
 [[中文 Readme]][url-doczh]
 |
 [[English Readme]][url-docen]
+
+The author hasn't updated for a long time, so he made some changes himself and added vulnerability detection. The effect is as follows:
+
+```
+-t "127.0.0.1" --exploit --hydra
+```
+
+![img效果图.png](assets/img.png)
 
 ## 0 Disclaimer (~~The author did not participate in the XX action, don't trace it~~)
 
@@ -123,6 +125,12 @@ hydra options:
                   If there is a comma in the password, use \, to escape, other symbols do not need to be escaped
    --hydra-update Customize the user name and password mode. If this parameter is carried, it is a new mode, and the user name and password will be added to the default dictionary. Otherwise the default dictionary will be replaced.
    --hydra-mod specifies the automatic brute force cracking module: rdp or rdp, ssh, smb
+exploit options:
+   --cookie       Set cookies
+   --num          web poc packet sending rate (default 20)
+   --dns          Using DnsLog Poc
+   --full         POC full scan, such as: shiro 100 key
+   --wt           web access timeout (default 5)
 fofa options:
    --fofa-syntax will get fofa search syntax description
    --fofa-size will set the number of entries returned by fofa, the default is 100

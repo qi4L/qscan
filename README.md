@@ -1,10 +1,4 @@
 # KscanPro-轻量化全方位扫描器
-<a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/golang-1.8+-9cf"></a>
-<a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/kscan-1.86-ff69b4"></a>
-<a href="https://github.com/lcvvvv/kscan"><img alt="Release" src="https://img.shields.io/badge/LICENSE-GPL-important"></a>
-![GitHub Repo stars](https://img.shields.io/github/stars/lcvvvv/kscan?color=success)
-![GitHub forks](https://img.shields.io/github/forks/lcvvvv/kscan)
-![GitHub all release](https://img.shields.io/github/downloads/lcvvvv/kscan/total?color=blueviolet) 
 
 [[中文 Readme]][url-doczh]
 
@@ -109,11 +103,11 @@ hydra options:
    --hydra-update 自定义用户名、密码模式，若携带此参数，则为新增模式，会将用户名和密码补充在默认字典后面。否则将替换默认字典。
    --hydra-mod    指定自动化暴力破解模块:rdp or rdp,ssh,smb
 exploit options:
-   --cookie       设置cookie
+   --cookie       设置 cookie
    --num          web poc 发包速率  (default 20)
-   --dns          使用DnsLog Poc
-   --full         poc全扫描，如：shiro 100 key
-   --wt           web访问超时时间 (default 5)
+   --dns          使用 DnsLog Poc
+   --full         poc 全扫描，如：shiro 100 key
+   --wt           web 访问超时时间 (default 5)
 fofa options:
    --fofa-syntax  将获取fofa搜索语法说明
    --fofa-size    将设置fofa返回条目数，默认100条
