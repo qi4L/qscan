@@ -7,7 +7,6 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
-	"time"
 )
 
 var (
@@ -259,28 +258,29 @@ func StrMapRandomColor(m map[string]string, printKey bool, importantKey []string
 	return s[:len(s)-2]
 }
 
-func StrRandomColor(chars []string) {
-	rand.Seed(time.Now().UnixNano())
+func StrRandomColor(chars string) string {
+	str1 := ""
 	useForegroundColor := false
-	for _, char := range chars {
+	parts := strings.Split(chars, ",")
+	for _, char := range parts {
 		char1 := char + ", "
 		if useForegroundColor {
 			fg := randomFgColor()
-			colorR.New(fg).Print(char1)
+			str1 += fg.Render(char1)
 		} else {
 			bg := randomBgColor()
-			colorR.New(bg).Print(char1)
+			str1 += bg.Render(char1)
 		}
 		useForegroundColor = !useForegroundColor
 	}
-	fmt.Println()
+	return str1
 }
 
 // 生成随机前景色
 func randomFgColor() colorR.Color {
 	colors := []colorR.Color{
 		colorR.FgBlack, colorR.FgRed, colorR.FgGreen, colorR.FgYellow,
-		colorR.FgBlue, colorR.FgMagenta, colorR.FgCyan, colorR.FgWhite,
+		colorR.FgBlue, colorR.FgMagenta, colorR.FgCyan,
 	}
 	return colors[rand.Intn(len(colors))]
 }
@@ -289,7 +289,7 @@ func randomFgColor() colorR.Color {
 func randomBgColor() colorR.Color {
 	colors := []colorR.Color{
 		colorR.BgBlack, colorR.BgRed, colorR.BgGreen, colorR.BgYellow,
-		colorR.BgBlue, colorR.BgMagenta, colorR.BgCyan, colorR.BgWhite,
+		colorR.BgBlue, colorR.BgMagenta, colorR.BgCyan,
 	}
 	return colors[rand.Intn(len(colors))]
 }

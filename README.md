@@ -4,13 +4,7 @@
 
 [[English Readme]][url-docen]
 
-作者很久没更新了，就自己改了下，加入漏洞检测，效果如下：
-
-```
--t "127.0.0.1" --exploit --hydra
-```
-
-![img效果图.png](assets/img.png)
+就加了个漏洞检测。
 
 ## 1 简介
 
@@ -137,6 +131,10 @@ fofa options:
 ### 6.5 CDN识别
 
 ![WechatIMG996](assets/CDN识别演示.jpg)
+
+### 6.6 漏洞探测
+
+![img_1.png](assets/img_1.png)
 
 [url-doczh]: README
 [url-docen]: README_ENG.md

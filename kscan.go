@@ -217,9 +217,7 @@ func Init() {
 		slog.SetLevel(slog.INFO)
 	}
 	//color包初始化
-	if os.Getenv("KSCAN_COLOR") == "TRUE" {
-		color.Enabled()
-	}
+	color.Enabled()
 	if app.Args.CloseColor == true {
 		color.Disabled()
 	}

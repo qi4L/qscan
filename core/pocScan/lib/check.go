@@ -3,10 +3,12 @@ package lib
 import (
 	"KscanPro/app"
 	"KscanPro/core/pocScan/info"
+	"KscanPro/core/slog"
 	"KscanPro/lib/color"
 	"crypto/md5"
 	"fmt"
 	"github.com/google/cel-go/cel"
+	colorR "github.com/gookit/color"
 	"math/rand"
 	"net/http"
 	"net/url"
@@ -34,10 +36,10 @@ func CheckMultiPoc(req *http.Request, pocs []*Poc, workers int) {
 			for task := range tasks {
 				isVul, _, name := executePoc(task.Req, task.Poc)
 				if isVul {
-					fmt.Print("    ")
-					ret := fmt.Sprintf("└ PocScan, %s, %s, %s", task.Req.URL, task.Poc.Name, name)
-					ret1 := strings.Split(ret, ",")
-					color.StrRandomColor(ret1)
+					red := colorR.BgRed.Render
+					format := "%-30v %-35v %s"
+					printStr := fmt.Sprintf(format, task.Req.URL, red("PocSuccess"), color.StrRandomColor(task.Poc.Name+","+name))
+					slog.Println(slog.DATA, printStr)
 				}
 				wg.Done()
 			}
@@ -359,24 +361,33 @@ func clusterpoc(oReq *http.Request, p *Poc, variableMap map[string]interface{}, 
 			if success {
 				if rule.Continue {
 					if p.Name == "poc-yaml-backup-file" || p.Name == "poc-yaml-sql-file" {
-						fmt.Print("    ")
-						ret := fmt.Sprintf("└ PocScan, %s://%s%s, %s", req.Url.Scheme, req.Url.Host, req.Url.Path, p.Name)
-						ret1 := strings.Split(ret, ",")
-						color.StrRandomColor(ret1)
+						red := colorR.BgRed.Render
+						format := "%-30v %-35v %s"
+						printStr := fmt.Sprintf(format, req.Url.Scheme, red("PocSuccess"), color.StrRandomColor(req.Url.Host+","+req.Url.Path+","+p.Name))
+						slog.Println(slog.DATA, printStr)
+						//ret := fmt.Sprintf("└ PocScan, %s://%s%s, %s", req.Url.Scheme, req.Url.Host, req.Url.Path, p.Name)
+						//ret1 := strings.Split(ret, ",")
+						//color.StrRandomColor(ret1)
 					} else {
-						fmt.Print("    ")
-						ret := fmt.Sprintf("└ PocScan, %s://%s%s, %s, %v", req.Url.Scheme, req.Url.Host, req.Url.Path, p.Name, tmpMap)
-						ret1 := strings.Split(ret, ",")
-						color.StrRandomColor(ret1)
+						red := colorR.BgRed.Render
+						format := "%-30v %-35v %s %v"
+						printStr := fmt.Sprintf(format, req.Url.Scheme, red("PocSuccess"), color.StrRandomColor(req.Url.Host+","+req.Url.Path+","+p.Name+","), tmpMap)
+						slog.Println(slog.DATA, printStr)
+						//ret := fmt.Sprintf("└ PocScan, %s://%s%s, %s, %v", req.Url.Scheme, req.Url.Host, req.Url.Path, p.Name, tmpMap)
+						//ret1 := strings.Split(ret, ",")
+						//color.StrRandomColor(ret1)
 					}
 					continue
 				}
 				strMap = append(strMap, tmpMap...)
 				if i == len(p.Rules)-1 {
-					fmt.Print("    ")
-					ret := fmt.Sprintf("└ PocScan, %s://%s%s, %s, %v", req.Url.Scheme, req.Url.Host, req.Url.Path, p.Name, strMap)
-					ret1 := strings.Split(ret, ",")
-					color.StrRandomColor(ret1)
+					red := colorR.BgRed.Render
+					format := "%-30v %-35v %s %v"
+					printStr := fmt.Sprintf(format, req.Url.Scheme, red("PocSuccess"), color.StrRandomColor(req.Url.Host+","+req.Url.Path+","+p.Name+","), tmpMap)
+					slog.Println(slog.DATA, printStr)
+					//ret := fmt.Sprintf("└ PocScan, %s://%s%s, %s, %v", req.Url.Scheme, req.Url.Host, req.Url.Path, p.Name, strMap)
+					//ret1 := strings.Split(ret, ",")
+					//color.StrRandomColor(ret1)
 					//防止后续继续打印poc成功信息
 					return false, nil
 				}
