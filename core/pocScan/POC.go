@@ -16,14 +16,21 @@ var Pocs embed.FS
 var once sync.Once
 var AllPocs []*lib.Poc
 
-func Run1(Url string) {
+func WebScan(info *app.HostInfo) {
 	once.Do(initpoc)
 	var pocinfo = app.PocInfo{}
-	URL, _ := removeStandardPorts(Url)
+	URL, _ := removeStandardPorts(info.Url)
 	buf := strings.Split(URL, "/")
 	pocinfo.Target = strings.Join(buf[:3], "/")
-	pocinfo.PocName = lib.CheckInfoPoc("")
-	Execute(pocinfo)
+
+	if pocinfo.PocName != "" {
+		Execute(pocinfo)
+	} else {
+		for _, infoStr := range info.Infostr {
+			pocinfo.PocName = lib.CheckInfoPoc(infoStr)
+			Execute(pocinfo)
+		}
+	}
 }
 
 func Execute(PocInfo app.PocInfo) {

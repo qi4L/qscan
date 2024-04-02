@@ -56,7 +56,7 @@ var (
 	CustomAuthMap  *AuthList
 	ProtocolList   = []string{
 		"ssh", "rdp", "ftp", "smb", "telnet",
-		"mysql", "mssql", "oracle", "postgresql", "mongodb", "redis", "web",
+		"mysql", "mssql", "oracle", "postgresql", "mongodb", "redis",
 		//110:   "pop3",
 		//995:   "pop3",
 		//25:    "smtp",

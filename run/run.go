@@ -319,7 +319,12 @@ func generateURLScanner(wg *sync.WaitGroup) *scanner.URLClient {
 		outputAppFinger(URL, banner, finger)
 		if app.Setting.Exploit == true {
 			url := URL.Scheme + "://" + URL.Host
-			pocScan.Run1(url)
+			info := app.HostInfo{
+				Host:  URL.Scheme,
+				Ports: URL.Hostname(),
+				Url:   url,
+			}
+			pocScan.WebTitle(&info)
 		}
 	}
 	client.HandlerError = func(url *url.URL, err error) {

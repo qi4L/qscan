@@ -51,6 +51,13 @@ type PocInfo struct {
 	PocName string
 }
 
+type HostInfo struct {
+	Host    string
+	Ports   string
+	Url     string
+	Infostr []string
+}
+
 var Args = args{}
 
 // Parse 初始化参数
