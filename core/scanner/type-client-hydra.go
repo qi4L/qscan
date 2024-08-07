@@ -1,8 +1,8 @@
 package scanner
 
 import (
-	"KscanPro/app"
-	"KscanPro/core/hydra"
+	"Qscan-G/app"
+	"Qscan-G/core/hydra"
 	"net"
 )
 

@@ -3,7 +3,7 @@ package lic
 import (
 	"io"
 
-	"KscanPro/lib/grdp/core"
+	"Qscan-G/lib/grdp/core"
 )
 
 const (

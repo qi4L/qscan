@@ -1,11 +1,11 @@
 package fofa
 
 import (
-	"KscanPro/app"
-	"KscanPro/core/slog"
-	"KscanPro/lib/color"
-	"KscanPro/lib/fofa"
-	"KscanPro/lib/misc"
+	"Qscan-G/app"
+	"Qscan-G/core/slog"
+	"Qscan-G/lib/color"
+	"Qscan-G/lib/fofa"
+	"Qscan-G/lib/misc"
 	"fmt"
 	"regexp"
 	"strconv"

@@ -1,10 +1,10 @@
 package cdn
 
 import (
-	"KscanPro/core/slog"
-	"KscanPro/lib/dns"
-	"KscanPro/lib/qqwry"
-	"KscanPro/lib/uri"
+	"Qscan-G/core/slog"
+	"Qscan-G/lib/dns"
+	"Qscan-G/lib/qqwry"
+	"Qscan-G/lib/uri"
 	"os"
 	"path/filepath"
 	"strings"

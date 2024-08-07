@@ -1,4 +1,4 @@
-module KscanPro
+module Qscan-G
 
 go 1.22
 

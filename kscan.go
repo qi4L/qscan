@@ -1,18 +1,18 @@
 package main
 
 import (
-	"KscanPro/app"
-	"KscanPro/core/cdn"
-	"KscanPro/core/fofa"
-	"KscanPro/core/hydra"
-	"KscanPro/core/pocScan/lib"
-	"KscanPro/core/scanner"
-	"KscanPro/core/slog"
-	"KscanPro/core/spy"
-	"KscanPro/core/tips"
-	"KscanPro/lib/color"
-	"KscanPro/lib/misc"
-	"KscanPro/run"
+	"Qscan-G/app"
+	"Qscan-G/core/cdn"
+	"Qscan-G/core/fofa"
+	"Qscan-G/core/hydra"
+	"Qscan-G/core/pocScan/lib"
+	"Qscan-G/core/scanner"
+	"Qscan-G/core/slog"
+	"Qscan-G/core/spy"
+	"Qscan-G/core/tips"
+	"Qscan-G/lib/color"
+	"Qscan-G/lib/misc"
+	"Qscan-G/run"
 	"embed"
 	"fmt"
 	"os"
@@ -26,13 +26,7 @@ import (
 )
 
 // logo信息
-const logo = `
-██╗  ██╗███████╗ ██████╗ █████╗ ███╗   ██╗
-██║ ██╔╝██╔════╝██╔════╝██╔══██╗████╗  ██║
-█████╔╝ ███████╗██║     ███████║██╔██╗ ██║
-██╔═██╗ ╚════██║██║     ██╔══██║██║╚██╗██║
-██║  ██╗███████║╚██████╗██║  ██║██║ ╚████║
-╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═══╝`
+const logo = ``
 
 // 帮助信息
 const help = `

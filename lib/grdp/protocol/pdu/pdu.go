@@ -6,10 +6,10 @@ import (
 	"errors"
 	"fmt"
 
-	"KscanPro/lib/grdp/core"
-	"KscanPro/lib/grdp/emission"
-	"KscanPro/lib/grdp/glog"
-	"KscanPro/lib/grdp/protocol/t125/gcc"
+	"Qscan-G/lib/grdp/core"
+	"Qscan-G/lib/grdp/emission"
+	"Qscan-G/lib/grdp/glog"
+	"Qscan-G/lib/grdp/protocol/t125/gcc"
 )
 
 type PDULayer struct {

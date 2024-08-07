@@ -1,7 +1,7 @@
 package sflag
 
 import (
-	"KscanPro/lib/misc"
+	"Qscan-G/lib/misc"
 	"flag"
 	"fmt"
 	"io"

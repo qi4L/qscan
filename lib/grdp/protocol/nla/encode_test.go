@@ -4,7 +4,7 @@ import (
 	"encoding/hex"
 	"testing"
 
-	"KscanPro/lib/grdp/protocol/nla"
+	"Qscan-G/lib/grdp/protocol/nla"
 )
 
 func TestNTOWFv2(t *testing.T) {

@@ -1,7 +1,7 @@
 package scanner
 
 import (
-	"KscanPro/core/cdn"
+	"Qscan-G/core/cdn"
 	"net"
 	"sync"
 )

@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"io"
 
-	"KscanPro/lib/grdp/glog"
+	"Qscan-G/lib/grdp/glog"
 
-	"KscanPro/lib/grdp/core"
-	"KscanPro/lib/grdp/protocol/t125/gcc"
+	"Qscan-G/lib/grdp/core"
+	"Qscan-G/lib/grdp/protocol/t125/gcc"
 	"github.com/lunixbochs/struc"
 )
 

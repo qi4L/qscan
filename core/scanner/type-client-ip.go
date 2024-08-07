@@ -1,8 +1,8 @@
 package scanner
 
 import (
-	"KscanPro/lib/osping"
-	"KscanPro/lib/tcpping"
+	"Qscan-G/lib/osping"
+	"Qscan-G/lib/tcpping"
 	"net"
 )
 

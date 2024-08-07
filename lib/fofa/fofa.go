@@ -1,7 +1,7 @@
 package fofa
 
 import (
-	"KscanPro/lib/misc"
+	"Qscan-G/lib/misc"
 	"encoding/json"
 	"io/ioutil"
 	"log"

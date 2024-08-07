@@ -1,7 +1,7 @@
 package oracle
 
 import (
-	"KscanPro/core/slog"
+	"Qscan-G/core/slog"
 	"database/sql"
 	"errors"
 	"fmt"

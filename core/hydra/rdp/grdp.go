@@ -1,7 +1,7 @@
 package rdp
 
 import (
-	"KscanPro/lib/grdp"
+	"Qscan-G/lib/grdp"
 	"fmt"
 )
 

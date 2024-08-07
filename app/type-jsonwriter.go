@@ -1,7 +1,7 @@
 package app
 
 import (
-	"KscanPro/core/slog"
+	"Qscan-G/core/slog"
 	"encoding/json"
 	"os"
 	"sync"

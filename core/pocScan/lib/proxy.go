@@ -1,7 +1,7 @@
 package lib
 
 import (
-	"KscanPro/app"
+	"Qscan-G/app"
 	"errors"
 	"golang.org/x/net/proxy"
 	"net"

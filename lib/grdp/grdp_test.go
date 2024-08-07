@@ -1,7 +1,7 @@
 package grdp
 
 import (
-	"KscanPro/lib/grdp/glog"
+	"Qscan-G/lib/grdp/glog"
 	"fmt"
 	"testing"
 )

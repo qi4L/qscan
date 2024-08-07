@@ -1,7 +1,7 @@
 package telnet
 
 import (
-	"KscanPro/lib/gotelnet"
+	"Qscan-G/lib/gotelnet"
 )
 
 func Check(addr, username, password string, port, serverType int) error {

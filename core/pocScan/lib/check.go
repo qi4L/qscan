@@ -1,10 +1,10 @@
 package lib
 
 import (
-	"KscanPro/app"
-	"KscanPro/core/pocScan/info"
-	"KscanPro/core/slog"
-	"KscanPro/lib/color"
+	"Qscan-G/app"
+	"Qscan-G/core/pocScan/info"
+	"Qscan-G/core/slog"
+	"Qscan-G/lib/color"
 	"crypto/md5"
 	"fmt"
 	"github.com/google/cel-go/cel"

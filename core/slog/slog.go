@@ -1,7 +1,7 @@
 package slog
 
 import (
-	"KscanPro/lib/color"
+	"Qscan-G/lib/color"
 	"fmt"
 	"github.com/lcvvvv/stdio"
 	"io"

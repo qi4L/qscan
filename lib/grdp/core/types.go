@@ -1,6 +1,6 @@
 package core
 
-import "KscanPro/lib/grdp/emission"
+import "Qscan-G/lib/grdp/emission"
 
 type Transport interface {
 	Read(b []byte) (n int, err error)

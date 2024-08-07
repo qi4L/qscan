@@ -1,8 +1,8 @@
 package pocScan
 
 import (
-	"KscanPro/app"
-	"KscanPro/core/pocScan/lib"
+	"Qscan-G/app"
+	"Qscan-G/core/pocScan/lib"
 	"compress/gzip"
 	"crypto/tls"
 	"errors"

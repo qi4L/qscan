@@ -8,12 +8,12 @@ import (
 	"io"
 	"reflect"
 
-	"KscanPro/lib/grdp/core"
-	"KscanPro/lib/grdp/emission"
-	"KscanPro/lib/grdp/glog"
-	"KscanPro/lib/grdp/protocol/t125/ber"
-	"KscanPro/lib/grdp/protocol/t125/gcc"
-	"KscanPro/lib/grdp/protocol/t125/per"
+	"Qscan-G/lib/grdp/core"
+	"Qscan-G/lib/grdp/emission"
+	"Qscan-G/lib/grdp/glog"
+	"Qscan-G/lib/grdp/protocol/t125/ber"
+	"Qscan-G/lib/grdp/protocol/t125/gcc"
+	"Qscan-G/lib/grdp/protocol/t125/per"
 )
 
 // take idea from https://github.com/Madnikulin50/gordp

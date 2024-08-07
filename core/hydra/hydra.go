@@ -1,9 +1,9 @@
 package hydra
 
 import (
-	"KscanPro/core/hydra/oracle"
-	"KscanPro/lib/gotelnet"
-	"KscanPro/lib/misc"
+	"Qscan-G/core/hydra/oracle"
+	"Qscan-G/lib/gotelnet"
+	"Qscan-G/lib/misc"
 	"errors"
 	"github.com/lcvvvv/pool"
 	"strings"

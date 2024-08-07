@@ -3,8 +3,8 @@ package pdu
 import (
 	"bytes"
 
-	"KscanPro/lib/grdp/core"
-	"KscanPro/lib/grdp/glog"
+	"Qscan-G/lib/grdp/core"
+	"Qscan-G/lib/grdp/glog"
 )
 
 /**

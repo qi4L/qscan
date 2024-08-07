@@ -71,6 +71,7 @@ func DefaultSshList() *AuthList {
 		"test123",
 		"123456789",
 		"q1w2e3r4",
+		"allever4ALL",
 		//"0000",
 		//"root",
 		//"test",

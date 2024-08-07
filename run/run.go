@@ -1,15 +1,15 @@
 package run
 
 import (
-	"KscanPro/app"
-	"KscanPro/core/cdn"
-	"KscanPro/core/hydra"
-	"KscanPro/core/pocScan"
-	"KscanPro/core/scanner"
-	"KscanPro/core/slog"
-	"KscanPro/lib/color"
-	"KscanPro/lib/misc"
-	"KscanPro/lib/uri"
+	"Qscan-G/app"
+	"Qscan-G/core/cdn"
+	"Qscan-G/core/hydra"
+	"Qscan-G/core/pocScan"
+	"Qscan-G/core/scanner"
+	"Qscan-G/core/slog"
+	"Qscan-G/lib/color"
+	"Qscan-G/lib/misc"
+	"Qscan-G/lib/uri"
 	"fmt"
 	"github.com/atotto/clipboard"
 	"github.com/lcvvvv/appfinger"
@@ -283,12 +283,22 @@ func generatePortScanner(wg *sync.WaitGroup) *scanner.PortClient {
 	}
 	client.HandlerOpen = func(addr net.IP, port int) {
 		outputOpenResponse(addr, port)
+
 	}
 	client.HandlerNotMatched = func(addr net.IP, port int, response string) {
 		outputUnknownResponse(addr, port, response)
 	}
 	client.HandlerMatched = func(addr net.IP, port int, response *gonmap.Response) {
 		URLRaw := fmt.Sprintf("%s://%s:%d", response.FingerPrint.Service, addr.String(), port)
+		if app.Setting.Exploit == true {
+			if port == 445 {
+				info := app.HostInfo{
+					Host:  addr.String(),
+					Ports: strconv.Itoa(port),
+				}
+				pocScan.MS17010(&info)
+			}
+		}
 		URL, _ := url.Parse(URLRaw)
 		if appfinger.SupportCheck(URL.Scheme) == true {
 			pushURLTarget(URL, response)

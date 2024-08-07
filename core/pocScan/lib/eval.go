@@ -1,7 +1,7 @@
 package lib
 
 import (
-	"KscanPro/app"
+	"Qscan-G/app"
 	"bytes"
 	"compress/gzip"
 	"crypto/md5"

@@ -1,10 +1,10 @@
 package spy
 
 import (
-	"KscanPro/core/slog"
-	"KscanPro/lib/misc"
-	"KscanPro/lib/osping"
-	"KscanPro/lib/uri"
+	"Qscan-G/core/slog"
+	"Qscan-G/lib/misc"
+	"Qscan-G/lib/osping"
+	"Qscan-G/lib/uri"
 	"fmt"
 	"github.com/lcvvvv/pool"
 	"net"

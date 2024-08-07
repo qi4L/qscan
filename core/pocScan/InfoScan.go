@@ -1,7 +1,7 @@
 package pocScan
 
 import (
-	"KscanPro/core/pocScan/info"
+	"Qscan-G/core/pocScan/info"
 	"crypto/md5"
 	"fmt"
 	"regexp"

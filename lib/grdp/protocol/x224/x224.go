@@ -6,11 +6,11 @@ import (
 	"errors"
 	"fmt"
 
-	"KscanPro/lib/grdp/glog"
+	"Qscan-G/lib/grdp/glog"
 
-	"KscanPro/lib/grdp/core"
-	"KscanPro/lib/grdp/emission"
-	"KscanPro/lib/grdp/protocol/tpkt"
+	"Qscan-G/lib/grdp/core"
+	"Qscan-G/lib/grdp/emission"
+	"Qscan-G/lib/grdp/protocol/tpkt"
 	"github.com/lunixbochs/struc"
 )
 

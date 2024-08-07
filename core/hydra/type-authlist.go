@@ -1,7 +1,7 @@
 package hydra
 
 import (
-	"KscanPro/lib/misc"
+	"Qscan-G/lib/misc"
 )
 
 type AuthList struct {

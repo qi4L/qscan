@@ -1,7 +1,7 @@
 package app
 
 import (
-	"KscanPro/lib/sflag"
+	"Qscan-G/lib/sflag"
 	"fmt"
 	"github.com/gookit/color"
 	"os"

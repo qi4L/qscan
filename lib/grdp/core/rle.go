@@ -1,7 +1,7 @@
 package core
 
 import (
-	"KscanPro/lib/grdp/glog"
+	"Qscan-G/lib/grdp/glog"
 	"unsafe"
 )
 

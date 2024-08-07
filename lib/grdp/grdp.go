@@ -9,15 +9,15 @@ import (
 	"sync"
 	"time"
 
-	"KscanPro/lib/grdp/core"
-	"KscanPro/lib/grdp/glog"
-	"KscanPro/lib/grdp/protocol/nla"
-	"KscanPro/lib/grdp/protocol/pdu"
-	"KscanPro/lib/grdp/protocol/rfb"
-	"KscanPro/lib/grdp/protocol/sec"
-	"KscanPro/lib/grdp/protocol/t125"
-	"KscanPro/lib/grdp/protocol/tpkt"
-	"KscanPro/lib/grdp/protocol/x224"
+	"Qscan-G/lib/grdp/core"
+	"Qscan-G/lib/grdp/glog"
+	"Qscan-G/lib/grdp/protocol/nla"
+	"Qscan-G/lib/grdp/protocol/pdu"
+	"Qscan-G/lib/grdp/protocol/rfb"
+	"Qscan-G/lib/grdp/protocol/sec"
+	"Qscan-G/lib/grdp/protocol/t125"
+	"Qscan-G/lib/grdp/protocol/tpkt"
+	"Qscan-G/lib/grdp/protocol/x224"
 )
 
 const (

@@ -1,9 +1,9 @@
 package app
 
 import (
-	"KscanPro/core/hydra"
-	"KscanPro/core/slog"
-	"KscanPro/lib/misc"
+	"Qscan-G/core/hydra"
+	"Qscan-G/core/slog"
+	"Qscan-G/lib/misc"
 	"encoding/csv"
 	"os"
 	"strings"

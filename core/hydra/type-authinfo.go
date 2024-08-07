@@ -1,7 +1,7 @@
 package hydra
 
 import (
-	"KscanPro/lib/color"
+	"Qscan-G/lib/color"
 	"fmt"
 )
 

@@ -1,7 +1,7 @@
 package dns
 
 import (
-	"KscanPro/lib/misc"
+	"Qscan-G/lib/misc"
 	"context"
 	"github.com/miekg/dns"
 	"net"

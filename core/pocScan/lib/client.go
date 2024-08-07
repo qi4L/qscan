@@ -1,7 +1,7 @@
 package lib
 
 import (
-	"KscanPro/app"
+	"Qscan-G/app"
 	"context"
 	"crypto/tls"
 	"embed"
