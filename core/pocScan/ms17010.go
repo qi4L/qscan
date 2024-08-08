@@ -3,6 +3,9 @@ package pocScan
 import (
 	"Qscan-G/app"
 	"Qscan-G/core/pocScan/lib"
+	"Qscan-G/core/slog"
+	"Qscan-G/lib/color"
+	"Qscan-G/lib/misc"
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/base64"
@@ -10,6 +13,9 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	colorR "github.com/gookit/color"
+	"github.com/lcvvvv/stdio/chinese"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -32,8 +38,8 @@ var key = "0123456789abcdef"
 func MS17010(info *app.HostInfo) error {
 	err := MS17010Scan(info)
 	if err != nil {
-		errlog := fmt.Sprintf("[-] Ms17010 %v %v", info.Host, err)
-		fmt.Println(errlog)
+		//errlog := fmt.Sprintf("[-] Ms17010 %v %v", info.Host, err)
+		//fmt.Println(errlog)
 	}
 	return err
 }
@@ -133,8 +139,23 @@ func MS17010Scan(info *app.HostInfo) error {
 		//fmt.Printf("%s\tMS17-010\t(%s)\n", ip, os)
 		//if runtime.GOOS=="windows" {fmt.Printf("%s\tMS17-010\t(%s)\n", ip, os)
 		//} else{fmt.Printf("\033[33m%s\tMS17-010\t(%s)\033[0m\n", ip, os)}
-		result := fmt.Sprintf("[+] MS17-010 %s\t(%s)", ip, os)
-		fmt.Println(result)
+		printStr := fmt.Sprintf("%-30v %-35v %s", ip+":445", colorR.BgRed.Render("MS17010Success"), color.StrRandomColor(os))
+		slog.Println(slog.DATA, printStr)
+		m := make(map[string]string)
+		sourceMap := misc.CloneMap(m)
+		if cw := app.Setting.OutputCSV; cw != nil {
+			sourceMap["URL"] = ip + ":445"
+			sourceMap["Keyword"] = "存在"
+			delete(sourceMap, "Header")
+			delete(sourceMap, "Cert")
+			delete(sourceMap, "Response")
+			delete(sourceMap, "Body")
+			sourceMap["Digest"] = strconv.Quote(sourceMap["Digest"])
+			for key, value := range sourceMap {
+				sourceMap[key] = chinese.ToUTF8(value)
+			}
+			cw.Push(sourceMap)
+		}
 		defer func() {
 			//if common.SC != "" {
 			//	MS17010EXP(info)

@@ -5,14 +5,17 @@ import (
 	"Qscan-G/core/pocScan/info"
 	"Qscan-G/core/slog"
 	"Qscan-G/lib/color"
+	"Qscan-G/lib/misc"
 	"crypto/md5"
 	"fmt"
 	"github.com/google/cel-go/cel"
 	colorR "github.com/gookit/color"
+	"github.com/lcvvvv/stdio/chinese"
 	"math/rand"
 	"net/http"
 	"net/url"
 	"regexp"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -36,10 +39,24 @@ func CheckMultiPoc(req *http.Request, pocs []*Poc, workers int) {
 			for task := range tasks {
 				isVul, _, name := executePoc(task.Req, task.Poc)
 				if isVul {
-					red := colorR.BgRed.Render
-					format := "%-30v %-35v %s"
-					printStr := fmt.Sprintf(format, task.Req.URL, red("PocSuccess"), color.StrRandomColor(task.Poc.Name+","+name))
+					printStr := fmt.Sprintf("%-30v %-35v %s", task.Req.URL, colorR.BgRed.Render("PocSuccess"), color.StrRandomColor(task.Poc.Name+","+name))
 					slog.Println(slog.DATA, printStr)
+					m := make(map[string]string)
+					sourceMap := misc.CloneMap(m)
+					if cw := app.Setting.OutputCSV; cw != nil {
+						sourceMap["URL"] = task.Req.URL.String()
+						sourceMap["Keyword"] = "PocSuccess"
+						sourceMap["POC"] = task.Poc.Name + "," + name
+						delete(sourceMap, "Header")
+						delete(sourceMap, "Cert")
+						delete(sourceMap, "Response")
+						delete(sourceMap, "Body")
+						sourceMap["Digest"] = strconv.Quote(sourceMap["Digest"])
+						for key, value := range sourceMap {
+							sourceMap[key] = chinese.ToUTF8(value)
+						}
+						cw.Push(sourceMap)
+					}
 				}
 				wg.Done()
 			}
@@ -365,17 +382,43 @@ func clusterpoc(oReq *http.Request, p *Poc, variableMap map[string]interface{}, 
 						format := "%-30v %-35v %s"
 						printStr := fmt.Sprintf(format, req.Url.Scheme, red("PocSuccess"), color.StrRandomColor(req.Url.Host+","+req.Url.Path+","+p.Name))
 						slog.Println(slog.DATA, printStr)
-						//ret := fmt.Sprintf("└ PocScan, %s://%s%s, %s", req.Url.Scheme, req.Url.Host, req.Url.Path, p.Name)
-						//ret1 := strings.Split(ret, ",")
-						//color.StrRandomColor(ret1)
+						m := make(map[string]string)
+						sourceMap := misc.CloneMap(m)
+						if cw := app.Setting.OutputCSV; cw != nil {
+							sourceMap["URL"] = req.Url.Scheme
+							sourceMap["Keyword"] = "PocSuccess"
+							sourceMap["POC"] = req.Url.Host + "," + req.Url.Path + "," + p.Name
+							delete(sourceMap, "Header")
+							delete(sourceMap, "Cert")
+							delete(sourceMap, "Response")
+							delete(sourceMap, "Body")
+							sourceMap["Digest"] = strconv.Quote(sourceMap["Digest"])
+							for key, value := range sourceMap {
+								sourceMap[key] = chinese.ToUTF8(value)
+							}
+							cw.Push(sourceMap)
+						}
 					} else {
 						red := colorR.BgRed.Render
 						format := "%-30v %-35v %s %v"
 						printStr := fmt.Sprintf(format, req.Url.Scheme, red("PocSuccess"), color.StrRandomColor(req.Url.Host+","+req.Url.Path+","+p.Name+","), tmpMap)
 						slog.Println(slog.DATA, printStr)
-						//ret := fmt.Sprintf("└ PocScan, %s://%s%s, %s, %v", req.Url.Scheme, req.Url.Host, req.Url.Path, p.Name, tmpMap)
-						//ret1 := strings.Split(ret, ",")
-						//color.StrRandomColor(ret1)
+						m := make(map[string]string)
+						sourceMap := misc.CloneMap(m)
+						if cw := app.Setting.OutputCSV; cw != nil {
+							sourceMap["URL"] = req.Url.Scheme
+							sourceMap["Keyword"] = "PocSuccess"
+							sourceMap["POC"] = req.Url.Host + "," + req.Url.Path + "," + p.Name
+							delete(sourceMap, "Header")
+							delete(sourceMap, "Cert")
+							delete(sourceMap, "Response")
+							delete(sourceMap, "Body")
+							sourceMap["Digest"] = strconv.Quote(sourceMap["Digest"])
+							for key, value := range sourceMap {
+								sourceMap[key] = chinese.ToUTF8(value)
+							}
+							cw.Push(sourceMap)
+						}
 					}
 					continue
 				}
@@ -385,9 +428,22 @@ func clusterpoc(oReq *http.Request, p *Poc, variableMap map[string]interface{}, 
 					format := "%-30v %-35v %s %v"
 					printStr := fmt.Sprintf(format, req.Url.Scheme, red("PocSuccess"), color.StrRandomColor(req.Url.Host+","+req.Url.Path+","+p.Name+","), tmpMap)
 					slog.Println(slog.DATA, printStr)
-					//ret := fmt.Sprintf("└ PocScan, %s://%s%s, %s, %v", req.Url.Scheme, req.Url.Host, req.Url.Path, p.Name, strMap)
-					//ret1 := strings.Split(ret, ",")
-					//color.StrRandomColor(ret1)
+					m := make(map[string]string)
+					sourceMap := misc.CloneMap(m)
+					if cw := app.Setting.OutputCSV; cw != nil {
+						sourceMap["URL"] = req.Url.Scheme
+						sourceMap["Keyword"] = "PocSuccess"
+						sourceMap["POC"] = req.Url.Host + "," + req.Url.Path + "," + p.Name
+						delete(sourceMap, "Header")
+						delete(sourceMap, "Cert")
+						delete(sourceMap, "Response")
+						delete(sourceMap, "Body")
+						sourceMap["Digest"] = strconv.Quote(sourceMap["Digest"])
+						for key, value := range sourceMap {
+							sourceMap[key] = chinese.ToUTF8(value)
+						}
+						cw.Push(sourceMap)
+					}
 					//防止后续继续打印poc成功信息
 					return false, nil
 				}
