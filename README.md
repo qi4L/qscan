@@ -4,7 +4,7 @@
 
 # 特点
 
-+ 更快的扫描速度
++ 更快的扫描速度，同端口数下速度对比：
 
 KScan
 ![img.png](assets/kscan速度.png)
@@ -80,3 +80,8 @@ fofa options:
    --fofa-size    将设置fofa返回条目数，默认100条
    --fofa-fix-keyword 修饰keyword，该参数中的{}最终会替换成-f参数的值
 ```
+
+# 参考
+
+https://github.com/lcvvvv/kscan
+https://github.com/shadow1ng/fscan
