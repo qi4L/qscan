@@ -26,7 +26,10 @@ import (
 )
 
 // logo信息
-const logo = ``
+const logo = `        
+	┏┓┏┏┏┓┏┓
+	┗┫┛┗┗┻┛┗
+	 ┗      `
 
 // 帮助信息
 const help = `
@@ -83,7 +86,7 @@ fofa options:
    --fofa-fix-keyword 修饰keyword，该参数中的{}最终会替换成-f参数的值
 `
 
-const usage = "usage: kscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--spy]) [options] [hydra options] [fofa options]\n\n"
+const usage = "usage: qscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--spy]) [options] [hydra options] [fofa options]\n\n"
 
 const syntax = `title="beijing"			从标题中搜索"北京"			-
 header="elastic"		从http头中搜索"elastic"			-
