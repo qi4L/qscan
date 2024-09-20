@@ -31,17 +31,6 @@ type Config struct {
 	Exploit, DnsLog, PocFull bool
 	Cookie                   string
 	PocNum, WebTimeout       int
-	//fofa
-	Fofa           []string
-	FofaFixKeyword string
-	FofaSize       int
-	Scan           bool
-	//CDN检测模块
-	DownloadQQwry bool
-	CloseCDN      bool
-	//输出修饰
-	Match    string
-	NotMatch string
 }
 
 var Setting = New()
@@ -83,17 +72,6 @@ func ConfigInit() {
 	Setting.DnsLog = args.DnsLog
 	Setting.PocFull = args.PocFull
 	Setting.WebTimeout = args.WebTimeout
-	//fofa模块
-	Setting.Fofa = args.Fofa
-	Setting.FofaSize = args.FofaSize
-	Setting.FofaFixKeyword = args.FofaFixKeyword
-	Setting.Scan = args.Scan
-	//CDN检测模块
-	Setting.DownloadQQwry = args.DownloadQQwry
-	Setting.CloseCDN = args.CloseCDN
-	//输出修饰
-	Setting.Match = args.Match
-	Setting.NotMatch = args.NotMatch
 }
 
 func loadOutputJSON(path string) *JSONWriter {

@@ -31,8 +31,6 @@ type args struct {
 	FofaField, FofaFixKeyword string
 	FofaSize                  int
 	FofaSyntax                bool
-	//输出修饰
-	Match, NotMatch string
 }
 
 var (
@@ -125,8 +123,6 @@ func (o *args) define() {
 
 	//输出模块
 	sflag.StringVar(&o.Encoding, "encoding", "utf-8")
-	sflag.StringVar(&o.Match, "match", "")
-	sflag.StringVar(&o.NotMatch, "not-match", "")
 	sflag.StringVar(&o.Output, "o", "")
 	sflag.StringVar(&o.Output, "output", "")
 	sflag.StringVar(&o.OutputJson, "oJ", "")

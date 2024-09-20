@@ -2,11 +2,8 @@ package main
 
 import (
 	"Qscan/app"
-	"Qscan/core/cdn"
-	"Qscan/core/fofa"
 	"Qscan/core/hydra"
 	"Qscan/core/pocScan/lib"
-	"Qscan/core/scanner"
 	"Qscan/core/slog"
 	"Qscan/core/spy"
 	"Qscan/core/tips"
@@ -15,7 +12,6 @@ import (
 	"Qscan/run"
 	"embed"
 	"fmt"
-	"os"
 	"runtime"
 	"time"
 
@@ -35,7 +31,6 @@ const logo = `
 const help = `
 optional arguments:
   -h , --help     show this help message and exit
-  -f , --fofa     从fofa获取检测对象，需提前配置环境变量:FOFA_EMAIL、FOFA_KEY
   -t , --target   指定探测对象：
                   IP地址：114.114.114.114
                   IP地址段：114.114.114.114/24,不建议子网掩码小于12
@@ -47,7 +42,6 @@ optional arguments:
                   (空)、192、10、172、all、指定IP地址(将探测该IP地址B段存活网关)
 options:
   --check         针对目标地址做指纹识别，仅不会进行端口探测
-  --scan          将针对--fofa、--spy提供的目标对象，进行端口扫描和指纹识别
   -p , --port     扫描指定端口，默认会扫描TOP400，支持：80,8080,8088-8090
   -eP, --excluded-port 跳过扫描指定的端口，支持：80,8080,8088-8090
   -o , --output   将扫描结果保存到文件
@@ -64,8 +58,6 @@ options:
   --host          指定所有请求的头部Host值
   --timeout       设置超时时间
   --encoding      设置终端输出编码，可指定为：gb2312、utf-8
-  --match         对资产返回banner进行检索，剔除不存在关键字的结果记录
-  --not-match     对资产返回banner进行检索，剔除存在关键字的结果记录
   -hY , --hydra         自动化爆破支持协议：ssh,rdp,ftp,smb,mysql,mssql,oracle,postgresql,mongodb,redis,默认会开启全部
   -eX , --exploit       漏洞探测，使用xray poc
 hydra options:
@@ -86,51 +78,7 @@ fofa options:
    --fofa-fix-keyword 修饰keyword，该参数中的{}最终会替换成-f参数的值
 `
 
-const usage = "usage: qscan [-h,--help,--fofa-syntax] (-t,--target,-f,--fofa,--spy]) [options] [hydra options] [fofa options]\n\n"
-
-const syntax = `title="beijing"			从标题中搜索"北京"			-
-header="elastic"		从http头中搜索"elastic"			-
-body="网络空间测绘"		从html正文中搜索"网络空间测绘"		-
-domain="qq.com"			搜索根域名带有qq.com的网站。		-
-icp="京ICP证030173号"		查找备案号为"京ICP证030173号"的网站	搜索网站类型资产
-js_name="js/jquery.js"		查找包含js/jquery.js的资产		搜索网站类型资产
-js_md5="82ac3f14327a8b7ba49baa208d4eaa15"	查找js源码与之匹配的资产	-
-icon_hash="-247388890"		搜索使用此icon的资产。			仅限FOFA高级会员使用
-host=".gov.cn"			从url中搜索".gov.cn"			搜索要用host作为名称
-port="6379"			查找对应"6379"端口的资产		-
-ip="1.1.1.1"			从ip中搜索包含"1.1.1.1"的网站		搜索要用ip作为名称
-ip="220.181.111.1/24"		查询IP为"220.181.111.1"的C网段资产	-
-status_code="402"		查询服务器状态为"402"的资产		-
-protocol="quic"			查询quic协议资产			搜索指定协议类型(在开启端口扫描的情况下有效)
-country="CN"			搜索指定国家(编码)的资产。		-
-region="Xinjiang"		搜索指定行政区的资产。			-
-city="Changsha"			搜索指定城市的资产。			-
-cert="baidu"			搜索证书中带有baidu的资产。		-
-cert.subject="Oracle"		搜索证书持有者是Oracle的资产		-
-cert.issuer="DigiCert"		搜索证书颁发者为DigiCert Inc的资产	-
-cert.is_valid=true		验证证书是否有效			仅限FOFA高级会员使用
-type=service			搜索所有协议资产			搜索所有协议资产
-os="centos"			搜索CentOS资产。			-
-server=="Microsoft-IIS"		搜索IIS 10服务器。			-
-app="Oracle"			搜索Microsoft-Exchange设备		-
-after="2017" && before="2017-10-01"	时间范围段搜索			-
-asn="19551"			搜索指定asn的资产。			-
-org="Amazon.com, Inc."	搜索指定org(组织)的资产。			-
-base_protocol="udp"		搜索指定udp协议的资产。			-
-is_fraud=falsenew		排除仿冒/欺诈数据			-
-is_honeypot=false		排除蜜罐数据				仅限FOFA高级会员使用
-is_ipv6=true			搜索ipv6的资产				搜索ipv6的资产,只接受true和false。
-is_domain=true			搜索域名的资产				搜索域名的资产,只接受true和false。
-port_size="6"			查询开放端口数量等于"6"的资产		仅限FOFA会员使用
-port_size_gt="6"		查询开放端口数量大于"6"的资产		仅限FOFA会员使用
-port_size_lt="12"		查询开放端口数量小于"12"的资产		仅限FOFA会员使用
-ip_ports="80,161"		搜索同时开放80和161端口的ip		搜索同时开放80和161端口的ip资产(以ip为单位的资产数据)
-ip_country="CN"			搜索中国的ip资产。			搜索中国的ip资产
-ip_region="Zhejiang"		搜索指定行政区的ip资产。		索指定行政区的资产
-ip_city="Hangzhou"		搜索指定城市的ip资产。			搜索指定城市的资产
-ip_after="2021-03-18"		搜索2021-03-18以后的ip资产。		搜索2021-03-18以后的ip资产
-ip_before="2019-09-09"		搜索2019-09-09以前的ip资产。		搜索2019-09-09以前的ip资产
-`
+const usage = "usage: qscan [-h,--help,--fofa-syntax] (-t,--target,--spy]) [options] [hydra options] \n\n"
 
 func main() {
 	startTime := time.Now()
@@ -138,45 +86,12 @@ func main() {
 	//环境初始化
 	Init()
 
-	//下载qqwry
-	if app.Setting.DownloadQQwry == true {
-		slog.Println(slog.INFO, "现在开始下载最新qqwry，请耐心等待！")
-		err := cdn.DownloadQQWry()
-		if err != nil {
-			slog.Println(slog.WARN, "纯真IP库下载失败，请手动下载解压后保存到kscan同一目录")
-			slog.Println(slog.WARN, "下载链接： https://qqwry.mirror.noc.one/qqwry.rar")
-			slog.Println(slog.WARN, err)
-		}
-		slog.Println(slog.INFO, "qqwry.dat下载成功！")
-		os.Exit(0)
-	}
-
 	//spy模块启动
 	if app.Setting.Spy != "None" {
 		spy.Keyword = app.Setting.Spy
-		spy.Scan = app.Setting.Scan
 		spy.Start()
-		if spy.Scan {
-			app.Setting.Target = spy.Target
-		}
 	}
 
-	//fofa模块初始化
-	if len(app.Setting.Fofa) > 0 {
-		InitFofa()
-		fofa.Run()
-		if app.Setting.Check == false && app.Setting.Scan == false {
-			slog.Println(slog.WARN, "可以使用--check参数对fofa扫描结果进行存活性及指纹探测，也可以使用--scan参数对fofa扫描结果进行端口扫描")
-		}
-		if app.Setting.Check == true {
-			app.Setting.Target = fofa.GetUrlTarget()
-			slog.Println(slog.WARN, "check参数已启用，现在将对fofa扫描结果进行存活性及指纹探测")
-		}
-		if app.Setting.Scan == true {
-			app.Setting.Target = fofa.GetHostTarget()
-			slog.Println(slog.WARN, "scan参数已启用，现在将对fofa扫描结果进行端口扫描及指纹探测")
-		}
-	}
 	//Hydra模块初始化
 	if app.Setting.Hydra == true {
 		slog.Println(slog.INFO, "hydra模块已开启，开始监听暴力破解任务")
@@ -184,10 +99,10 @@ func main() {
 		//加载Hydra模块自定义字典
 		hydra.InitCustomAuthMap(app.Setting.HydraUser, app.Setting.HydraPass)
 	}
-	//kscan模块启动
+	//qscan模块启动
 	if len(app.Setting.Target) > 0 {
 		//扫描模块初始化
-		InitKscan()
+		InitQscan()
 		//开始扫描
 		run.Start()
 	}
@@ -200,7 +115,6 @@ func Init() {
 	app.Args.SetLogo(logo)
 	app.Args.SetUsage(usage)
 	app.Args.SetHelp(help)
-	app.Args.SetSyntax(syntax)
 	//参数初始化
 	app.Args.Parse()
 	//基础输出初始化
@@ -237,11 +151,10 @@ func Init() {
 var fingerprintEmbed embed.FS
 
 const (
-	qqwryPath       = "qqwry.dat"
 	fingerprintPath = "static/fingerprint.txt"
 )
 
-func InitKscan() {
+func InitQscan() {
 	//HTTP初始化
 	lib.Inithttp()
 	//HTTP指纹库初始化
@@ -254,25 +167,4 @@ func InitKscan() {
 	//超时及日志配置
 	gonmap.SetLogger(slog.Debug())
 	slog.Printf(slog.INFO, "成功加载NMAP探针:[%d]个,指纹[%d]条", gonmap.UsedProbesCount, gonmap.UsedMatchCount)
-	//CDN检测初始化
-	if app.Setting.CloseCDN == false {
-		if _, err := os.Lstat(qqwryPath); os.IsNotExist(err) == true {
-			slog.Printf(slog.WARN, "未检测到qqwry.dat,将关闭CDN检测功能，如需开启，请执行kscan --download-qqwry下载该文件")
-			app.Setting.CloseCDN = true
-		} else {
-			slog.Printf(slog.INFO, "检测到qqwry.dat,将自动启动CDN检测功能，可使用-Dn参数关闭该功能")
-			scanner.CDNCheck = true
-			cdn.Init(qqwryPath)
-		}
-	}
-}
-
-func InitFofa() {
-	email := os.Getenv("FOFA_EMAIL")
-	key := os.Getenv("FOFA_KEY")
-	if email == "" || key == "" {
-		slog.Println(slog.WARN, "使用-f/-fofa参数前请先配置环境变量：FOFA_EMAIL、FOFA_KEY")
-		slog.Println(slog.ERROR, "如果你是想从文件导入端口扫描任务，请使用-t file:/path/to/file")
-	}
-	fofa.Init(email, key)
 }

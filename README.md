@@ -6,8 +6,8 @@
 
 + 更快的扫描速度，同端口数下速度对比：
 
-KScan
-![img.png](assets/kscan速度.png)
+QScan
+![img.png](assets/qscan速度.png)
 
 FScan
 ![img.png](assets/FScan.png)
@@ -28,6 +28,7 @@ FScan
 ## 使用参数
 
 ```
+optional arguments:
 optional arguments:
   -h , --help     show this help message and exit
   -f , --fofa     从fofa获取检测对象，需提前配置环境变量:FOFA_EMAIL、FOFA_KEY

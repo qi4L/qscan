@@ -2,7 +2,6 @@ package run
 
 import (
 	"Qscan/app"
-	"Qscan/core/cdn"
 	"Qscan/core/hydra"
 	"Qscan/core/pocScan"
 	"Qscan/core/scanner"
@@ -32,7 +31,6 @@ func Start() {
 	//下发扫描任务
 	var wg = &sync.WaitGroup{}
 	wg.Add(5)
-	DomainScanner = generateDomainScanner(wg)
 	IPScanner = generateIPScanner(wg)
 	PortScanner = generatePortScanner(wg)
 	URLScanner = generateURLScanner(wg)
@@ -89,7 +87,6 @@ func pushTarget(expr string) {
 		return
 	}
 	if uri.IsDomain(expr) {
-		DomainScanner.Push(expr)
 		pushURLTarget(uri.URLParse("http://"+expr), nil)
 		pushURLTarget(uri.URLParse("https://"+expr), nil)
 		return
@@ -164,15 +161,13 @@ func pushURLTarget(URL *url.URL, response *gonmap.Response) {
 }
 
 var (
-	DomainScanner *scanner.DomainClient
-	IPScanner     *scanner.IPClient
-	PortScanner   *scanner.PortClient
-	URLScanner    *scanner.URLClient
-	HydraScanner  *scanner.HydraClient
+	IPScanner    *scanner.IPClient
+	PortScanner  *scanner.PortClient
+	URLScanner   *scanner.URLClient
+	HydraScanner *scanner.HydraClient
 )
 
 func start() {
-	go DomainScanner.Start()
 	go IPScanner.Start()
 	go PortScanner.Start()
 	go URLScanner.Start()
@@ -184,10 +179,6 @@ func start() {
 func stop() {
 	for {
 		time.Sleep(time.Second)
-		if DomainScanner.RunningThreads() == 0 && DomainScanner.IsDone() == false {
-			DomainScanner.Stop()
-			slog.Println(slog.DEBUG, "检测到所有Domian检测任务已完成，Domain扫描引擎已停止")
-		}
 		if IPScanner.RunningThreads() == 0 && IPScanner.IsDone() == false {
 			IPScanner.Stop()
 			slog.Println(slog.DEBUG, "检测到所有IP检测任务已完成，IP扫描引擎已停止")
@@ -211,25 +202,6 @@ func stop() {
 			slog.Println(slog.DEBUG, "检测到所有暴力破解任务已完成，暴力破解引擎已停止")
 		}
 	}
-}
-
-func generateDomainScanner(wg *sync.WaitGroup) *scanner.DomainClient {
-	DomainConfig := scanner.DefaultConfig()
-	DomainConfig.Threads = 10
-	client := scanner.NewDomainScanner(DomainConfig)
-	client.HandlerRealIP = func(domain string, ip net.IP) {
-		IPScanner.Push(ip)
-	}
-	client.HandlerIsCDN = func(domain, CDNInfo string) {
-		outputCDNRecord(domain, CDNInfo)
-	}
-	client.HandlerError = func(domain string, err error) {
-		slog.Println(slog.DEBUG, "DomainScanner Error: ", domain, err)
-	}
-	client.Defer(func() {
-		wg.Done()
-	})
-	return client
 }
 
 func generateIPScanner(wg *sync.WaitGroup) *scanner.IPClient {
@@ -280,10 +252,6 @@ func generatePortScanner(wg *sync.WaitGroup) *scanner.PortClient {
 	client := scanner.NewPortScanner(PortConfig)
 	client.HandlerClosed = func(addr net.IP, port int) {
 		//nothing
-	}
-	client.HandlerOpen = func(addr net.IP, port int) {
-		outputOpenResponse(addr, port)
-
 	}
 	client.HandlerNotMatched = func(addr net.IP, port int, response string) {
 		outputUnknownResponse(addr, port, response)
@@ -378,32 +346,16 @@ func outputHydraSuccess(addr net.IP, port int, protocol string, auth *hydra.Auth
 }
 
 func outputNmapFinger(URL *url.URL, resp *gonmap.Response) {
-	if responseFilter(resp.Raw) == true {
-		return
-	}
 	finger := resp.FingerPrint
 	m := misc.ToMap(finger)
 	m["Response"] = resp.Raw
 	m["IP"] = URL.Hostname()
 	m["Port"] = URL.Port()
-	//补充归属地信息
-	if app.Setting.CloseCDN == false {
-		result, _ := cdn.Find(URL.Hostname())
-		m["Addr"] = result
-	}
 	outputHandler(URL, finger.Service, m)
 }
 
 func outputAppFinger(URL *url.URL, banner *appfinger.Banner, finger *appfinger.FingerPrint) {
-	if responseFilter(banner.Response, banner.Cert) == true {
-		return
-	}
 	m := misc.ToMap(finger)
-	//补充归属地信息
-	if app.Setting.CloseCDN == false {
-		result, _ := cdn.Find(URL.Hostname())
-		m["Addr"] = result
-	}
 	m["Service"] = URL.Scheme
 	m["FoundDomain"] = banner.FoundDomain
 	m["FoundIP"] = banner.FoundIP
@@ -421,32 +373,11 @@ func outputAppFinger(URL *url.URL, banner *appfinger.Banner, finger *appfinger.F
 	}
 	if hostname := URL.Hostname(); uri.IsIPv4(hostname) {
 		m["IP"] = hostname
-	} else {
-		m["Domain"] = hostname
-		if v, ok := scanner.DomainDatabase.Load(hostname); ok {
-			m["IP"] = v.(string)
-		}
 	}
 	outputHandler(URL, banner.Title, m)
 }
 
-func outputCDNRecord(domain, info string) {
-	if responseFilter(info) == true {
-		return
-	}
-	//输出结果
-	target := fmt.Sprintf("cdn://%s", domain)
-	URL, _ := url.Parse(target)
-	outputHandler(URL, "CDN资产", map[string]string{
-		"CDNInfo": info,
-		"Domain":  domain,
-	})
-}
-
 func outputUnknownResponse(addr net.IP, port int, response string) {
-	if responseFilter(response) == true {
-		return
-	}
 	//输出结果
 	target := fmt.Sprintf("unknown://%s:%d", addr.String(), port)
 	URL, _ := url.Parse(target)
@@ -457,40 +388,16 @@ func outputUnknownResponse(addr net.IP, port int, response string) {
 	})
 }
 
-func outputOpenResponse(addr net.IP, port int) {
-	//输出结果，排除响应为空的结果
-	//protocol := gonmap.GuessProtocol(port)
-	//target := fmt.Sprintf("%s://%s:%d", protocol, addr.String(), port)
-	//URL, _ := url.Parse(target)
-	//outputHandler(URL, "response is empty", map[string]string{
-	//	"IP":   URL.Hostname(),
-	//	"Port": strconv.Itoa(port),
-	//})
-}
-
-func responseFilter(strArgs ...string) bool {
-	var match = app.Setting.Match
-	var notMatch = app.Setting.NotMatch
-
-	if match != "" {
-		for _, str := range strArgs {
-			//主要结果中包含关键则，则会显示
-			if strings.Contains(str, app.Setting.Match) == true {
-				return false
-			}
-		}
-	}
-
-	if notMatch != "" {
-		for _, str := range strArgs {
-			//主要结果中包含关键则，则会显示
-			if strings.Contains(str, app.Setting.NotMatch) == true {
-				return true
-			}
-		}
-	}
-	return false
-}
+//输出结果，排除响应为空的结果
+/*func outputOpenResponse(addr net.IP, port int) {
+	protocol := gonmap.GuessProtocol(port)
+	target := fmt.Sprintf("%s://%s:%d", protocol, addr.String(), port)
+	URL, _ := url.Parse(target)
+	outputHandler(URL, "response is empty", map[string]string{
+		"IP":   URL.Hostname(),
+		"Port": strconv.Itoa(port),
+	})
+}*/
 
 var (
 	disableKey       = []string{"MatchRegexString", "Service", "ProbeName", "Response", "Cert", "Header", "Body", "IP"}
@@ -582,14 +489,13 @@ func watchDog() {
 	for {
 		time.Sleep(time.Second * 1)
 		var (
-			nDomain = DomainScanner.RunningThreads()
-			nIP     = IPScanner.RunningThreads()
-			nPort   = PortScanner.RunningThreads()
-			nURL    = URLScanner.RunningThreads()
-			nHydra  = HydraScanner.RunningThreads()
+			nIP    = IPScanner.RunningThreads()
+			nPort  = PortScanner.RunningThreads()
+			nURL   = URLScanner.RunningThreads()
+			nHydra = HydraScanner.RunningThreads()
 		)
 		if time.Now().Unix()%180 == 0 {
-			warn := fmt.Sprintf("当前存活协程数：Domain：%d 个，IP：%d 个，Port：%d 个，URL：%d 个，Hydra：%d 个", nDomain, nIP, nPort, nURL, nHydra)
+			warn := fmt.Sprintf("当前存活协程数：IP：%d 个，Port：%d 个，URL：%d 个，Hydra：%d 个", nIP, nPort, nURL, nHydra)
 			slog.Println(slog.WARN, warn)
 		}
 	}
