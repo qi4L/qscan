@@ -26,11 +26,6 @@ type args struct {
 	Exploit, DnsLog, PocFull bool
 	Cookie                   string
 	PocNum, WebTimeout       int
-	//fofa模块
-	Fofa                      []string
-	FofaField, FofaFixKeyword string
-	FofaSize                  int
-	FofaSyntax                bool
 }
 
 var (
@@ -93,14 +88,6 @@ func (o *args) define() {
 	sflag.IntVar(&o.WebTimeout, "wt", 5)
 	sflag.BoolVar(&o.DnsLog, "dns", false)
 	sflag.BoolVar(&o.PocFull, "full", false)
-	//fofa模块
-	sflag.StringSpliceVar(&o.Fofa, "fofa")
-	sflag.StringSpliceVar(&o.Fofa, "f")
-	sflag.StringVar(&o.FofaField, "fofa-field", "")
-	sflag.StringVar(&o.FofaFixKeyword, "fofa-fix-keyword", "")
-	sflag.IntVar(&o.FofaSize, "fofa-size", 100)
-	sflag.BoolVar(&o.FofaSyntax, "fofa-syntax", false)
-	sflag.BoolVar(&o.Scan, "scan", false)
 	//kscan模块
 	sflag.StringSpliceVar(&o.Target, "target")
 	sflag.StringSpliceVar(&o.Target, "t")
@@ -148,16 +135,6 @@ func (o *args) SetHelp(help string) {
 
 // CheckArgs 校验参数真实性
 func (o *args) CheckArgs() {
-	//判断必须的参数是否存在
-	if len(o.Target) == 0 && len(o.Fofa) == 0 && o.Spy == "None" && o.DownloadQQwry == false {
-		fmt.Print("至少有--target、--fofa、--spy参数中的一个")
-		os.Exit(0)
-	}
-	//判断冲突参数
-	if len(o.Target) > 0 && len(o.Fofa) == 0 && o.Spy != "None" && o.Touch == "None" {
-		fmt.Print("--target、--fofa、--spy不能同时使用")
-		os.Exit(0)
-	}
 	if len(o.Port) > 0 && o.Top != 400 {
 		fmt.Print("--port、--top参数不能同时使用")
 		os.Exit(0)
@@ -187,12 +164,6 @@ func (o *args) printBanner() {
 		fmt.Println(gradient(o.LOGO, pink))
 		fmt.Print(o.USAGE)
 		fmt.Print(o.HELP)
-		os.Exit(0)
-	}
-	if o.FofaSyntax {
-		fmt.Println(gradient(o.LOGO, pink))
-		fmt.Print(o.USAGE)
-		fmt.Print(o.SYNTAX)
 		os.Exit(0)
 	}
 	//打印logo

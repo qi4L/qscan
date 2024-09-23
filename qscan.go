@@ -72,13 +72,9 @@ exploit options:
    --dns          使用DnsLog Poc
    --full         poc全扫描，如：shiro 100 key
    --wt           web访问超时时间 (default 5)
-fofa options:
-   --fofa-syntax  将获取fofa搜索语法说明
-   --fofa-size    将设置fofa返回条目数，默认100条
-   --fofa-fix-keyword 修饰keyword，该参数中的{}最终会替换成-f参数的值
 `
 
-const usage = "usage: qscan [-h,--help,--fofa-syntax] (-t,--target,--spy]) [options] [hydra options] \n\n"
+const usage = "usage: qscan [-h,--help] (-t,--target,--spy]) [options] [hydra options] \n\n"
 
 func main() {
 	startTime := time.Now()

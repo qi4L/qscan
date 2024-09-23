@@ -29,9 +29,7 @@ FScan
 
 ```
 optional arguments:
-optional arguments:
   -h , --help     show this help message and exit
-  -f , --fofa     从fofa获取检测对象，需提前配置环境变量:FOFA_EMAIL、FOFA_KEY
   -t , --target   指定探测对象：
                   IP地址：114.114.114.114
                   IP地址段：114.114.114.114/24,不建议子网掩码小于12
@@ -43,7 +41,6 @@ optional arguments:
                   (空)、192、10、172、all、指定IP地址(将探测该IP地址B段存活网关)
 options:
   --check         针对目标地址做指纹识别，仅不会进行端口探测
-  --scan          将针对--fofa、--spy提供的目标对象，进行端口扫描和指纹识别
   -p , --port     扫描指定端口，默认会扫描TOP400，支持：80,8080,8088-8090
   -eP, --excluded-port 跳过扫描指定的端口，支持：80,8080,8088-8090
   -o , --output   将扫描结果保存到文件
@@ -60,8 +57,6 @@ options:
   --host          指定所有请求的头部Host值
   --timeout       设置超时时间
   --encoding      设置终端输出编码，可指定为：gb2312、utf-8
-  --match         对资产返回banner进行检索，剔除不存在关键字的结果记录
-  --not-match     对资产返回banner进行检索，剔除存在关键字的结果记录
   -hY , --hydra         自动化爆破支持协议：ssh,rdp,ftp,smb,mysql,mssql,oracle,postgresql,mongodb,redis,默认会开启全部
   -eX , --exploit       漏洞探测，使用xray poc
 hydra options:
@@ -76,10 +71,6 @@ exploit options:
    --dns          使用DnsLog Poc
    --full         poc全扫描，如：shiro 100 key
    --wt           web访问超时时间 (default 5)
-fofa options:
-   --fofa-syntax  将获取fofa搜索语法说明
-   --fofa-size    将设置fofa返回条目数，默认100条
-   --fofa-fix-keyword 修饰keyword，该参数中的{}最终会替换成-f参数的值
 ```
 
 # 参考

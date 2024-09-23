@@ -6,7 +6,6 @@ import (
 	"Qscan/lib/misc"
 	"encoding/csv"
 	"os"
-	"strings"
 	"sync"
 	"time"
 )
@@ -197,22 +196,6 @@ func (c *Config) loadHydraMod(splice []string) {
 		return
 	}
 	c.HydraMod = splice
-}
-
-func (c *Config) loadFofaField(expr string) []string {
-	//判断对象是否为多个
-	if strArr := strings.ReplaceAll(expr, "\\,", "[DouHao]"); strings.Count(strArr, ",") > 0 {
-		var passArr []string
-		for _, str := range strings.Split(strArr, ",") {
-			passArr = append(passArr, strings.ReplaceAll(str, "[DouHao]", ","))
-		}
-		return passArr
-	}
-	//对象为单个且不为空时直接返回
-	if expr != "" {
-		return []string{expr}
-	}
-	return []string{}
 }
 
 func New() Config {
