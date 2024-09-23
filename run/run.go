@@ -4,6 +4,7 @@ import (
 	"Qscan/app"
 	"Qscan/core/hydra"
 	"Qscan/core/pocScan"
+	"Qscan/core/pocScan/pocGo"
 	"Qscan/core/scanner"
 	"Qscan/core/slog"
 	"Qscan/lib/color"
@@ -348,6 +349,25 @@ func outputHydraSuccess(addr net.IP, port int, protocol string, auth *hydra.Auth
 func outputNmapFinger(URL *url.URL, resp *gonmap.Response) {
 	finger := resp.FingerPrint
 	m := misc.ToMap(finger)
+
+	if app.Setting.Exploit == true {
+		// GO编写的POC通过指纹来判断是否启用扫描
+		for _, value := range m {
+			// 对于iss的poc
+			if strings.Contains(value, "iss") {
+				parts := strings.Split(URL.Host, ":")
+				ip := parts[0]
+				port := parts[1]
+				port1, err := strconv.Atoi(port)
+				if err != nil {
+					fmt.Printf("Error converting string to int: %s\n", err)
+					return
+				}
+				pocGo.Cve20177269(ip, port1)
+			}
+		}
+	}
+
 	m["Response"] = resp.Raw
 	m["IP"] = URL.Hostname()
 	m["Port"] = URL.Port()
